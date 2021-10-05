@@ -63,7 +63,7 @@ func init() {
 func resolve(event yaml_event_t, v reflect.Value, useNumber bool) (string, error) {
 	val := string(event.value)
 
-	if null_values[val] {
+	if null_values[val] && string(event.tag) != yaml_STR_TAG {
 		v.Set(reflect.Zero(v.Type()))
 		return yaml_NULL_TAG, nil
 	}
@@ -412,7 +412,7 @@ func resolveInterface(event yaml_event_t, useNumber bool) (string, interface{}) 
 			}
 		}
 	case bytes.IndexByte(nulls, c) != -1:
-		if null_values[val] {
+		if null_values[val] && string(event.tag) != yaml_STR_TAG {
 			return yaml_NULL_TAG, nil
 		}
 		b := false

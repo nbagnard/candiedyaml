@@ -95,6 +95,20 @@ var _ = Describe("Resolver", func() {
 					})
 				})
 
+				It("resolves quoted null", func() {
+					checkNulls(func() {
+						event.value = []byte("null")
+						event.tag = []byte(yaml_STR_TAG)
+						aString := ""
+						v := reflect.ValueOf(&aString)
+
+						tag, err := resolve(event, v.Elem(), false)
+						Expect(err).NotTo(HaveOccurred())
+						Expect(tag).To(Equal(yaml_STR_TAG))
+						Expect(aString).To(Equal("null"))
+					})
+				})
+
 			})
 
 			Context("Booleans", func() {
